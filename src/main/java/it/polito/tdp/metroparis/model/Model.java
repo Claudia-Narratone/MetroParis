@@ -6,7 +6,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.jgrapht.Graph;
+import org.jgrapht.GraphPath;
 import org.jgrapht.Graphs;
+import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.event.ConnectedComponentTraversalEvent;
 import org.jgrapht.event.EdgeTraversalEvent;
 import org.jgrapht.event.TraversalListener;
@@ -139,6 +141,14 @@ public class Model {
 		return visita;
 	}
 	
+	public List<Fermata> camminiMinimi(Fermata partenza, Fermata arrivo) {
+		DijkstraShortestPath<Fermata, DefaultEdge> dij= new DijkstraShortestPath<>(graph);
+		
+		GraphPath<Fermata, DefaultEdge> cammino=dij.getPath(partenza, arrivo);
+		
+		return cammino.getVertexList();
+	}
+	
 	public static void main(String args[]) {
 		Model m=new Model();
 		List<Fermata> visita1=m.visitaAmpiezza(m.fermate.get(0));
@@ -150,5 +160,8 @@ public class Model {
 		for(Fermata f: albero.keySet()) {
 			System.out.format("%s <- %s \n", f, albero.get(f));
 		}
+		
+		List<Fermata> cammino=m.camminiMinimi(m.fermate.get(0), m.fermate.get(1));
+		System.out.println(cammino);
 	}
 }
